@@ -1,4 +1,5 @@
 const userModel = require("../models/user");
+const jwt = require('jsonwebtoken');
 const { errorResponse, successResponse } = require("../utils/responses");
 
 exports.showRegisterPage = async (req , res) => {
@@ -29,9 +30,18 @@ exports.register = async (req, res, next) => {
       role = "ADMIN";
     }
 
-    let user = new userModel({ email, username, password, name });
+    let user = new userModel({ email, username, password, name , role });
 
     user = await user.save();
+
+    let accessToken = jwt.sign({ username, email }, process.env.JWT_SECRET , {
+      expiresIn: "30day"
+    });
+
+    res.cookie("token" , accessToken , {
+      maxAge: 900000 ,
+      httpOnly: true 
+    })
 
     const userObj = user.toObject()
 
@@ -41,6 +51,7 @@ exports.register = async (req, res, next) => {
     // return successResponse(res, 201, {
     //   message: "User registered successfully !!",
     //   user: userObj,
+    //   accessToken
     // });
 
 
