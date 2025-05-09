@@ -1311,6 +1311,35 @@
       <p>Developed with 💖 by Silay!</p>
     </footer>
 
-    <script type="module" src="/src/Functions/index.js"></script>
+    <script type="module" src="/js/index.js"></script>
+    <script src="/js/sweetAlert.js"></script>
+
+    <script>
+        if ("<%= locals.messages.error %>") {
+            swal({
+                text: "<%= locals.messages.error %>",
+                icon: "error",
+                button: "Try Again",
+            });
+            let swalButton = document.querySelector(".swal-button")
+
+            swalButton.style.background = "#e57373"
+            swalButton.style.border = "0px"
+        }
+
+        if ("<%= locals.messages.success %>") {
+            swal({
+                text: "<%= locals.messages.success %>",
+                icon: "success",
+                button: "Ok",
+            });
+
+            let swalButton = document.querySelector(".swal-button")
+
+            swalButton.style.background = "#5cb85c"
+            swalButton.style.border = "0px"
+
+        }
+    </script>
   </body>
 </html>

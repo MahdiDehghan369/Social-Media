@@ -2,9 +2,13 @@ const express = require('express');
 const path = require('path');
 const expressFlash = require('express-flash');
 const expressSession = require("express-session");
+const cookieParser = require("cookie-parser")
 const {setHeaders} = require('./middlewares/headers');
 const {errorHandler} = require('./middlewares/errorHandler');
-const authRouter = require('./modules/auth.router');
+const authRouter = require('./modules/auth/auth.router');
+const postRouter = require('./modules/post/post.router');
+const pageRouter = require('./modules/page/page.router');
+const { cookie } = require('express/lib/response');
 
 const app = new express()
 
@@ -16,6 +20,7 @@ app.use(expressSession({
     saveUninitialized: false,
     resave: false
 }))
+
 app.use(expressFlash())
 
 
@@ -23,10 +28,15 @@ app.use(expressFlash())
 app.use(express.urlencoded({limit : '50mb' , extended: true}))
 app.use(express.json({limit: '50mb'}))
 
+
+// Cookie-Parser
+app.use(cookieParser())
+
 // Static Folders
 app.use('/css' , express.static(path.join(__dirname , '..' , 'public/css')))
 app.use('/fonts' , express.static(path.join(__dirname , '..' , 'public/fonts')))
 app.use('/images' , express.static(path.join(__dirname , '..' , 'public/images')))
+app.use('/js' , express.static(path.join(__dirname , '..' , 'public/js')))
 
 // Template Engine 
 app.set('view engine' , 'ejs')
@@ -38,6 +48,8 @@ app.get('/' , (req , res) => {
 })
 
 app.use('/auth' , authRouter)
+app.use("/post", postRouter);
+app.use("/page", pageRouter);
 
 
 // 404 Handler

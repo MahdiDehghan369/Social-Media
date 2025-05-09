@@ -116,7 +116,7 @@
     </div>
 
     </form>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/js/sweetAlert.js"></script>
 
     <script>
         if ("<%= locals.messages.error %>") {
@@ -145,7 +145,7 @@
 
 
             setTimeout(() => {
-                window.location.href = "/";
+                window.location.href = "/auth/login";
             }, 3000)
         }
     </script>
