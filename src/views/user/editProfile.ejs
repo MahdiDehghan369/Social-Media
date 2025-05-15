@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Edit</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body id="profile-edit-wrapper">
+
+    <div class="back-to-home">
+        <a href="http://127.0.0.1:8000/page/<%= userInfo._id %>">Back to home </a>
+    </div>
+    
+    <section id="profile-edit-form">
+
+        <header id="profile-edit-header">
+            <button class="current-tab">
+                Edit profile
+            </button>
+            <button>
+                Preferences
+            </button>
+            <button>
+                Security
+            </button>
+        </header>
+
+        <main id="profile-edit-main">
+
+            <!-- Profile Picture -->
+            <section id="edit-profile-picture-card">
+                <div id="edit-profile-picture" class="w-18 h-18 rounded-full overflow-hidden">
+                    <img src="/<%= userInfo.profilePicture %>" alt="Profile" class="object-cover">
+                </div>
+
+                <span id="edit-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                    </svg>
+                </span>
+            </section>
+
+            <!-- Edit Profile Content/inputs -->
+        <form action="/user/update-profile" method="post" enctype="multipart/form-data">
+            <section id="edit-profile-content">
+            <section id="edit-profile-container">
+                <!-- Name Input -->
+                <article class="edit-profile_input-card">
+                    <label for="profile-fullName" class="text-xs">
+                        Full name
+                    </label>
+                    <div class="profile-edit-input-card">
+                        <input class="profile-edit-input" id="profile-fullName" name="name" value="<%= userInfo.name %>" type="text" placeholder="Qadir Yolme">
+                    </div>
+                </article>
+
+                <!-- Username Input -->
+                <article class="edit-profile_input-card">
+                    <label for="profile-username" class="text-xs">
+                        Username
+                    </label>
+                    <div class="profile-edit-input-card">
+                        <input class="profile-edit-input" id="profile-username" name="username" value="<%= userInfo.username %>" type="text" placeholder="@yolme.dev">
+                    </div>
+                </article>
+
+                <!-- Email Input -->
+                <article class="edit-profile_input-card">
+                    <label for="profile-email" class="text-xs">
+                        Email address
+                    </label>
+                    <div class="profile-edit-input-card">
+                        <input class="profile-edit-input" id="profile-email" name="email" value="<%= userInfo.email %>" type="text"
+                            placeholder="support@sabzlearn.ir">
+                    </div>
+                </article>
+
+                <!-- Username Input -->
+                <article class="edit-profile_input-card">
+                    <label for="profile-password" class="text-xs">
+                        Password
+                    </label>
+                    <div class="profile-edit-input-card">
+                        <input class="profile-edit-input" name="password" id="profile-password" type="text" placeholder="********">
+                    </div>
+                </article>
+
+
+                <!-- Biography Input -->
+                <article class="edit-profile_input-card">
+                    <label for="profile-postal" class="text-xs">
+                        Biography
+                    </label>
+                    <div class="profile-edit-input-card">
+                        <input class="profile-edit-input" name="biography" value="<%= userInfo.biography %>" id="profile-postal" type="text">
+                    </div>
+                </article>
+
+                <!-- Profile Picture Input -->
+                <article class="edit-profile_input-card">
+                    <label for="profile-country" class="text-xs">
+                        Profile Picture
+                    </label>
+                    <div class="profile-edit-input-card">
+                        <input class="profile-edit-input"  name="profile" id="profile-country" type="file"
+                            placeholder="Iran">
+                    </div>
+                </article>
+            </section>
+            
+            <div class="flex" id="edit-porile-button-card">
+                <button id="edit-profile-button">
+                    Save changes
+                </button>
+            </div>
+            </section>
+        </form>
+
+
+        </main>
+
+    </section>
+    <script src="/js/sweetAlert.js"></script>
+
+    <script>
+        if ("<%= locals.messages.error %>") {
+            swal({
+                text: "<%= locals.messages.error %>",
+                icon: "error",
+                button: "Try Again",
+            });
+            let swalButton = document.querySelector(".swal-button")
+
+            swalButton.style.background = "#e57373"
+            swalButton.style.border = "0px"
+        }
+
+        if ("<%= locals.messages.success %>") {
+            swal({
+                text: "<%= locals.messages.success %>",
+                icon: "success",
+                button: "Ok",
+            });
+
+            let swalButton = document.querySelector(".swal-button")
+
+            swalButton.style.background = "#5cb85c"
+            swalButton.style.border = "0px"
+
+        }
+    </script>
+
+</body>
+
+</html>

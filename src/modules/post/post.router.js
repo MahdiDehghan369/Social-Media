@@ -13,4 +13,13 @@ router
   .route("/")
   .post(authMiddleware, uploader.single("media") ,controller.createPost);
 
+
+router.route("/like").post(authMiddleware , controller.like)
+router.route("/dislike").post(authMiddleware , controller.disLike)
+
+router.route("/save").post(authMiddleware , controller.save)
+router.route("/unsave").post(authMiddleware , controller.unSave)
+
+router.route("/saves").get(authMiddleware , controller.savesPost)
+
 module.exports = router

@@ -20,7 +20,7 @@ const schema = new mongoose.Schema(
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     password: {
       type: String,
@@ -28,7 +28,7 @@ const schema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      required: false,
+      default: "images/profiles/user.webp",
     },
     role: {
       type: String,

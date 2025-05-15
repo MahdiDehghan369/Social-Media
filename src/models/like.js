@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-    follower: {
+    post: {
         type: mongoose.Types.ObjectId,
-        ref: "user",
+        ref: "posts",
         required: true
     },
-    following: {
+    user: {
         type: mongoose.Types.ObjectId,
         ref: "user",
         required: true
@@ -14,7 +14,6 @@ const schema = new mongoose.Schema({
 })
 
 
-const model = mongoose.model("follow" , schema)
-
+const model = mongoose.model("like" , schema)
 
 module.exports = model

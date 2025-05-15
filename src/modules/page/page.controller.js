@@ -1,6 +1,10 @@
-const hasAccess = require("../../utils/hasAccessToPage");
+const hasAccessToPage = require("../../utils/hasAccessToPage");
 const followModel = require("../../models/follow");
 const userModel = require("../../models/user");
+const postModel = require("../../models/post");
+const likeModel = require("../../models/like");
+const saveModel = require("../../models/save");
+const { save } = require("../post/post.controller");
 
 exports.getPage = async (req, res, next) => {
   try {
@@ -12,16 +16,78 @@ exports.getPage = async (req, res, next) => {
       following: pageId,
     });
 
-    if (!(await hasAccess(user._id, pageId))) {
+    const page = await userModel
+      .findOne(
+        { _id: pageId },
+        " name username biography isVerified biography profilePicture"
+      )
+      .lean();
+
+    const hasAccess = await hasAccessToPage(user._id, pageId);
+
+    if (!hasAccess) {
       req.flash("error", "You have not access to see this page :)");
       return res.render("page/page.ejs", {
         followed: Boolean(followed),
         pageId,
+        followers: [],
+        followings: [],
+        hasAccess,
+        page,
+        posts: [],
+        own: false
       });
     }
+
+
+    let followers = await followModel
+      .find({ following: pageId })
+      .populate("follower", "name username profilePicture");
+
+      followers = followers.map(item => item.follower)
+
+    let followings = await followModel
+      .find({ follower: pageId })
+      .populate("following", "name username profilePicture");
+
+    followings = followings.map(item => item.following)
+
+    let posts = await postModel.find({user: pageId} , "-__v -user").sort({_id: -1}).populate("user" , "name username")
+
+    const own = user._id.toString() === pageId
+
+
+    const likes = await likeModel
+      .find({ user: user._id })
+      .populate("post", "_id");
+
+    const likedPostIds = likes.map((like) => like.post._id.toString());
+
+    const saves = await saveModel
+      .find({ user: user._id })
+      .populate("post", "_id");
+
+    const savesPostId = saves.map((save) => save.post._id.toString());
+
+    const postsWithLikeAndSave = posts.map((post) => {
+      const postId = post._id.toString();
+      return {
+        ...post.toObject(),
+        hasLike: likedPostIds.includes(postId),
+        hasSave: savesPostId.includes(postId),
+      };
+    });
+
+     
     return res.render("page/page.ejs", {
       followed: Boolean(followed),
       pageId,
+      followers,
+      followings,
+      hasAccess,
+      page,
+      posts: postsWithLikeAndSave,
+      own,
     });
   } catch (error) {
     next(error);

@@ -8,7 +8,8 @@ const {errorHandler} = require('./middlewares/errorHandler');
 const authRouter = require('./modules/auth/auth.router');
 const postRouter = require('./modules/post/post.router');
 const pageRouter = require('./modules/page/page.router');
-const { cookie } = require('express/lib/response');
+const userRouter = require("./modules/user/user.routes");
+const homeRouter = require("./modules/home/home.router");
 
 const app = new express()
 
@@ -43,13 +44,12 @@ app.set('view engine' , 'ejs')
 app.set('views' , path.join(__dirname , "views"))
 
 // Router
-app.get('/' , (req , res) => {
-    return res.render('index.ejs')
-})
 
 app.use('/auth' , authRouter)
 app.use("/post", postRouter);
 app.use("/page", pageRouter);
+app.use("/user", userRouter);
+app.use("/", homeRouter);
 
 
 // 404 Handler

@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
     path: { type: String, required: true },
     fileName: { type: String, required: true },
   },
+  title: {
+    type: String,
+    required: true
+  },
   description: {
     type: String,
     required: true,
@@ -14,7 +18,7 @@ const schema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Types.ObjectId,
-    ref: "users",
+    ref: "user",
     required: true,
   },
 });

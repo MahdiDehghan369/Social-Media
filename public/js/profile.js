@@ -517,7 +517,7 @@ const tabsFunc = () => {
   });
 };
 
-tabsFunc();
+// tabsFunc();
 
 const changePage = (title) => {
   currentTab = title;
