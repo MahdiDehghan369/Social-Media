@@ -115,3 +115,83 @@ exports.login = async (req, res, next) => {
 };
 
 
+
+exports.refreshToken = async (req , res , next) =>{
+  try {
+
+    const {refreshToken} = req.body
+
+    const userId = await refreshToken.verifyToken(refreshToken)
+
+    if(!userId){
+      return res.status(404).json({
+        message: "User Id not Found !!"
+      })
+    }
+
+    await refreshToken.findByIdAndDelete({
+      token: refreshToken
+    })
+
+    const user = await userModel.findOne({
+      _id: userId
+    })
+
+    if(!user){
+      return res.status(404).json({
+        message: "User not Found !!",
+      });
+    }
+
+    const accessToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "30day",
+    });
+
+    const newRefreshToken = await refreshToken.createToken(user)
+
+    res.cookie("Access-Token", accessToken, {
+      httpOnly: true,
+      maxAge: 900000,
+    });
+
+    res.cookie("Refresh-Token", newRefreshToken, {
+      httpOnly: true,
+      maxAge: 900000,
+    });
+    
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.showForgetPasswordView = async(req , res , next) => {
+  return res.render("auth/recovery");
+}
+
+
+
+
+
+exports.showResetPasswordView = async(req , res , next) => {
+
+  return res.render("auth/reset");
+
+  
+}
+
+
+exports.forgetPassword = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+exports.resetPassword = async(req , res , next) => {
+  try {
+    
+  } catch (error) {
+    next(error)
+  }
+}

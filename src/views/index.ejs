@@ -41,7 +41,7 @@
         <div class="flex gap-6 items-center">
           <a
             class="create-button bg-indigo-600"
-            href="/src/Pages/PostUpload/index.html"
+            href="/post"
           >
             Create
           </a>
@@ -51,7 +51,7 @@
               class="w-full h-full bg-transparent border-none"
             >
               <img
-                src="/images/profile-8.jpg"
+              src="http://localhost:8000/<%= user.profilePicture %>"
                 class="object-cover"
                 alt="profile cover"
               />
@@ -69,7 +69,7 @@
         <article class="profile-card shadow px-4">
           <div>
             <img
-              src="/images/profile-8.jpg"
+            src="http://localhost:8000/<%= user.profilePicture %>"
               class="w-12 h-12 rounded-full"
               alt="Mahdi Dehghan"
             />
@@ -78,9 +78,9 @@
             <p
               class="user-profile-name text-gray-900 font-Poppins-Bold text-sm"
             >
-              Mahdi Dehghan
+            <%= user.name %>
             </p>
-            <p class="font-Poppins-Light text-xs text-gray-500">@Silay369</p>
+            <p class="font-Poppins-Light text-xs text-gray-500">@<%= user.username %> </p>
           </div>
         </article>
 
@@ -173,7 +173,7 @@
             </a>
           </div>
           <div>
-            <a class="nav-link" href="/src/Pages/Bookmarks/index.html">
+            <a href="/post/saves" class="nav-link" href="/src/Pages/Bookmarks/index.html">
               <div class="flex-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +265,7 @@
 
         <!-- Create a post -->
         <a
-          href="/src/Pages/PostUpload/index.html"
+          href="/post"
           class="h-10 post-create rounded-2xl flex-center text-white bg-indigo-700"
         >
           Create post

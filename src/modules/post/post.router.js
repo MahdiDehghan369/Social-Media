@@ -21,5 +21,9 @@ router.route("/save").post(authMiddleware , controller.save)
 router.route("/unsave").post(authMiddleware , controller.unSave)
 
 router.route("/saves").get(authMiddleware , controller.savesPost)
+router.route("/:postId/remove").post(authMiddleware , controller.removePost)
+
+
+router.route("/new-comment").post(authMiddleware , controller.addComment)
 
 module.exports = router

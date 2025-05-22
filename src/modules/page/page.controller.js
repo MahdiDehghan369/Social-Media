@@ -4,7 +4,7 @@ const userModel = require("../../models/user");
 const postModel = require("../../models/post");
 const likeModel = require("../../models/like");
 const saveModel = require("../../models/save");
-const { save } = require("../post/post.controller");
+const commentModel = require("../../models/comment");
 
 exports.getPage = async (req, res, next) => {
   try {
@@ -35,6 +35,7 @@ exports.getPage = async (req, res, next) => {
         hasAccess,
         page,
         posts: [],
+        comments: [],
         own: false
       });
     }
@@ -78,6 +79,13 @@ exports.getPage = async (req, res, next) => {
       };
     });
 
+    const comments = await commentModel
+      .find({
+        page: pageId,
+      })
+      .populate("user", "name username profilePicture")
+      .lean();
+
      
     return res.render("page/page.ejs", {
       followed: Boolean(followed),
@@ -88,6 +96,8 @@ exports.getPage = async (req, res, next) => {
       page,
       posts: postsWithLikeAndSave,
       own,
+      comments
+      
     });
   } catch (error) {
     next(error);
