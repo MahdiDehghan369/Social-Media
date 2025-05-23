@@ -15,7 +15,7 @@
 <body class="auth-page">
     <section id="auth-container">
 
-        <form id="auth-form">
+        <form id="auth-form" action="/auth/reset-password" method="post">
             <header>
                 <h2 class="text-3xl">
                     Reset Password
@@ -62,6 +62,50 @@
     </div>
 
     </form>
+
+
+    <script>
+        const url = new URL(location.href)
+
+        const pathname = window.location.pathname 
+        const token = pathname.slice(pathname.indexOf("rd/") + 3)
+        const form = document.querySelector("form")
+
+        form.insertAdjacentHTML(
+            "afterbegin",
+            `<input type="hidden" name="token" value="${token}">`
+        )
+    </script>
+
+<script src="/js/sweetAlert.js"></script>
+
+<script>
+    if ("<%= locals.messages.error %>") {
+        swal({
+            text: "<%= locals.messages.error %>",
+            icon: "error",
+            button: "Try Again",
+        });
+        let swalButton = document.querySelector(".swal-button")
+
+        swalButton.style.background = "#e57373"
+        swalButton.style.border = "0px"
+    }
+
+    if ("<%= locals.messages.success %>") {
+        swal({
+            text: "<%= locals.messages.success %>",
+            icon: "success",
+            button: "Ok",
+        });
+
+        let swalButton = document.querySelector(".swal-button")
+
+        swalButton.style.background = "#5cb85c"
+        swalButton.style.border = "0px"
+    }
+</script>
+
 </body>
 
 </html>

@@ -402,7 +402,7 @@
             <div class="h-full flex-center absolute left-2">
               <span class="w-8 h-8 rounded-full overflow-hidden">
                 <img
-                  src="/images/profile-8.jpg"
+                  src="http://127.0.0.1:8000/<%= user.profilePicture %>"
                   class="object-cover"
                   alt=""
                 />
@@ -411,7 +411,7 @@
             <input
               type="text"
               class="tweet-input"
-              placeholder="What's on your mind, Peyman?"
+              placeholder="What's on your mind, <%= user.name %>?"
             />
             <button id="tweet-button">Post</button>
           </div>

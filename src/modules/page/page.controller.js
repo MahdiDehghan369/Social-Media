@@ -36,6 +36,7 @@ exports.getPage = async (req, res, next) => {
         page,
         posts: [],
         comments: [],
+        user,
         own: false
       });
     }
@@ -96,6 +97,7 @@ exports.getPage = async (req, res, next) => {
       page,
       posts: postsWithLikeAndSave,
       own,
+      user,
       comments
       
     });

@@ -42,7 +42,7 @@
         <div class="flex gap-6 items-center">
           <a
             class="create-button bg-indigo-600"
-            href="/src/Pages/PostUpload/index.html"
+            href="http://127.0.0.1:8000/post"
           >
             Create
           </a>
@@ -51,11 +51,13 @@
               id="profileButton"
               class="w-full h-full bg-transparent border-none"
             >
+            <a href="/">
               <img
-                src="/images/profile-8.jpg"
+                src="http://127.0.0.1:8000/<%=user.profilePicture %>"
                 class="object-cover"
                 alt="profile cover"
               />
+            </a>
             </button>
           </div>
         </div>

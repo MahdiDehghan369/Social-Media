@@ -17,6 +17,6 @@ const schema = new mongoose.Schema({
 })
 
 
-const model = mongoose.Model("resetPassword" , schema)
+const model = mongoose.model("resetPassword" , schema)
 
 module.exports = model

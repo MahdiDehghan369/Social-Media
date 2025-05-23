@@ -1,6 +1,9 @@
 const userModel = require("../../models/user");
 const refreshTokenModel = require("../../models/RefreshToken");
+const resetPasswordModel = require("../../models/resetPassword");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const { errorResponse, successResponse } = require("../../utils/responses");
 
@@ -182,6 +185,52 @@ exports.showResetPasswordView = async(req , res , next) => {
 
 exports.forgetPassword = async (req, res, next) => {
   try {
+
+    const {email} = req.body
+
+    const user = await userModel.findOne({email})
+
+    if(!user){
+      req.flash("error" , "User not found !!")
+      return res.redirect("/auth/forget-password")
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex")
+
+    const resetTokenExpireTime = Date.now() + 1000 * 60 * 10
+
+    const resetPassword = new resetPasswordModel({
+      user: user._id,
+      token: resetToken,
+      tokenExpireTime: resetTokenExpireTime
+    });
+
+    await resetPassword.save()
+
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: "",
+    //     pass: "",
+    //   },
+    // });
+
+
+    // const mailOption = {
+    //   from: "",
+    //   to: email,
+    //   subject: "Reset password link for your social account :)",
+    //   html: `
+    //   <h2> Hi ${user.name} </h2>
+    //   <a href=http://127.0.0.1:${process.env.PORT}/auth/reset-password/${resetToken}> Reset Password :) </a>
+    //   `,
+    // };
+
+    // transporter.sendMail(mailOption)
+
+    req.flash("success" , "Reset Password sent successfully :)")
+    return res.redirect(req.get("Referer") || `/page/${user._id}`);
+
   } catch (error) {
     next(error);
   }
@@ -191,6 +240,40 @@ exports.forgetPassword = async (req, res, next) => {
 exports.resetPassword = async(req , res , next) => {
   try {
     
+    const {password , token} = req.body
+
+    const resetPassword = await resetPasswordModel.findOne({
+      token,
+      tokenExpireTime : {$gt : Date.now()}
+    })
+
+    if(!resetPassword){
+      req.flash("error" , "Invalid Or Expite Token")
+      return res.redirect("/auth/forget-password")
+    }
+
+    const user = await userModel.findOne({
+      _id: resetPassword.user
+    })
+
+
+    if(!user){
+      req.flash("error", "Invalid Or Expite Token");
+      return res.redirect("/auth/forget-password");
+    }
+
+    const hashPassword = await bcrypt.hashSync(password , 12)
+
+    await userModel.findOneAndUpdate({_id: user._id} , {password : hashPassword})
+
+
+    req.flash("success" , "Password reset successsfully :)")
+
+    setTimeout(() => {
+    return res.redirect("/auth/login");
+      
+    }, 2000);
+
   } catch (error) {
     next(error)
   }
