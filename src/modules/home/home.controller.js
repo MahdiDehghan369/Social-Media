@@ -7,6 +7,11 @@ exports.showHomePage = async(req , res , next) => {
     return res.render("index.ejs" , {
         user: userInfo
     });
+
+
+    
+
+
     } catch (error) {
         next(error)
     }
